@@ -8,7 +8,6 @@
 
 - Use stable manifest ID where applicable. ([#12964](https://github.com/expo/expo/pull/12964) by [@wschurman](https://github.com/wschurman))
 - Add permission hook factory. ([#13782](https://github.com/expo/expo/pull/13782) by [@byCedric](https://github.com/byCedric))
-- Provide a new API to register fast synchronous JSI functions (aka. Expo's version of "TurboModules") ([#13516](https://github.com/expo/expo/pull/13516) by [@mrousavy](https://github.com/mrousavy))
 
 ### 🐛 Bug fixes
 
