@@ -96,19 +96,17 @@ async function runMetroProcesses(packageName: string, platform: Platform) {
 
 async function runWebProcesses(packageName: string) {
   const projectRoot = getProjectRoot(packageName);
-  console.log({ projectRoot });
 
   spawnAsync('expo', ['start', '--web'], {
     cwd: projectRoot,
     stdio: 'inherit',
   });
 
-
   const { child: storiesProcess } = spawnAsync('yarn', ['stories'], {
     cwd: projectRoot,
-    stdio: 'ignore',
+    stdio: ['ignore', 'ignore', process.stderr],
   });
-  
+
   process.on('SIGBREAK', () => {
     if (storiesProcess) {
       storiesProcess.kill('SIGINT');

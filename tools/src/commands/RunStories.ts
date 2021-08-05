@@ -54,10 +54,6 @@ async function action(name: string, { platform, rebuild = false, clearCache = fa
     await runPrebuildAsync(packageName);
 
     copyTemplateFiles(packageName);
-
-    // 4. yarn + install deps
-    Logger.log('🧶 Yarning...');
-    await spawnAsync('yarn', ['install'], { cwd: projectRoot });
   }
 
   if (clearCache) {

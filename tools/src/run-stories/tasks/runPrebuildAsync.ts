@@ -1,10 +1,16 @@
 import { getConfig } from '@expo/config';
-import { compileModsAsync } from '@expo/config-plugins';
-import { withAndroidExpoPlugins, withIosExpoPlugins } from '@expo/prebuild-config';
+import { compileModsAsync, withStaticPlugin } from '@expo/config-plugins';
+import {
+  withAndroidExpoPlugins,
+  withIosExpoPlugins,
+  getLegacyExpoPlugins,
+} from '@expo/prebuild-config';
+import spawnAsync from '@expo/spawn-async';
 import fs from 'fs';
 import path from 'path';
 
-import { getProjectRoot, getTargetName } from '../helpers';
+import Logger from '../../Logger';
+import { getPackageRoot, getProjectRoot, getTargetName } from '../helpers';
 
 export async function runPrebuildAsync(packageName: string) {
   const targetName = getTargetName(packageName);
@@ -30,6 +36,29 @@ export async function runPrebuildAsync(packageName: string) {
 
   let { exp: config } = getConfig(projectRoot);
 
+  const packageRoot = getPackageRoot(packageName);
+  const packagePkg = require(path.resolve(packageRoot, 'package.json'));
+
+  const plugins: string[] = [];
+  const packages = packagePkg.expoStories?.packages || {};
+  const legacyPlugins = getLegacyExpoPlugins();
+
+  Object.keys(packages).forEach((pkg: string) => {
+    if (legacyPlugins.includes(pkg)) {
+      plugins.push(pkg);
+    }
+  });
+
+  plugins.reduce((prev, plugin) => {
+    return withStaticPlugin(prev, {
+      // hide errors
+      _isLegacyPlugin: true,
+      plugin,
+      // If a plugin doesn't exist, do nothing.
+      fallback: (config) => config,
+    });
+  }, config);
+
   // // Add all android built-in plugins
   if (!config.android) config.android = {};
   config.android.package = packageName ?? config.android.package ?? `com.placeholder.appid`;
@@ -44,7 +73,7 @@ export async function runPrebuildAsync(packageName: string) {
     bundleIdentifier: config.ios.bundleIdentifier,
   });
 
-  return compileModsAsync(config, {
+  await compileModsAsync(config, {
     projectRoot,
     platforms: ['ios', 'android'],
     assertMissingModProviders: false,

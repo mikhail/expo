@@ -2,11 +2,10 @@ import { IosPlist } from '@expo/xdl';
 import fs from 'fs';
 import path from 'path';
 
-import { getPackageRoot, getProjectRoot, getTargetName } from '../helpers';
+import { getProjectRoot, getTargetName } from '../helpers';
 import { addDevMenu } from './addDevMenu';
 
 export function copyTemplateFiles(packageName: string) {
-  const packageRoot = getPackageRoot(packageName);
   const projectRoot = getProjectRoot(packageName);
   // eslint-disable-next-line
   const templateRoot = path.resolve(projectRoot, '../../template-files/stories-templates');
@@ -17,35 +16,6 @@ export function copyTemplateFiles(packageName: string) {
 
   const webpackConfigPath = path.resolve(templateRoot, 'webpack.config.js');
   fs.copyFileSync(webpackConfigPath, path.resolve(projectRoot, 'webpack.config.js'));
-
-  // package.json
-  const defaultPkg = require(path.resolve(templateRoot, 'pkg.json'));
-  const projectPkg = require(path.resolve(projectRoot, 'package.json'));
-  const packagePkg = require(path.resolve(packageRoot, 'package.json'));
-
-  const mergedPkg = {
-    ...projectPkg,
-    ...defaultPkg,
-  };
-
-  // configure story server
-  mergedPkg.expoStories = {
-    projectRoot,
-    watchRoot: packageRoot,
-  };
-
-  // remove dependencies from excluded autolinked packages
-  const extraNodeModules: any = packagePkg.expoStories?.packages ?? {};
-
-  mergedPkg.dependencies = {
-    ...mergedPkg.dependencies,
-    ...extraNodeModules,
-  };
-
-  fs.writeFileSync(
-    path.resolve(projectRoot, 'package.json'),
-    JSON.stringify(mergedPkg, null, '\t')
-  );
 
   // AppDelegate.{h,m}
   const targetName = getTargetName(packageName);
