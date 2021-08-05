@@ -1,5 +1,15 @@
 # Expo Stories
 
+
+## Getting Started
+
+Navigate to `packages/<packageName`> and run `et run-stories`
+
+If it is the first time anyone has done this (e.g there are no stories yet), `run-stories` will create all the necessary configuration and files required. 
+
+What you'll need to do next is figure out which native packages (e.g if we need to install any Cocoapods) are required by the package's story components - a good reference to use is in `apps/native-component-list/src/screens`. If there are any extras require, add them to the packages `expoStories.packages` field in `package.json.
+
+
 There are 3 primary components in this system:
 
 - the expo tool `et run-stories` which generates and starts a project for a given package
