@@ -51,6 +51,11 @@ async function action(name: string, { platform, rebuild = false, clearCache = fa
     Logger.info(`🛠  Scaffolding fresh story loader project for ${packageName}`);
 
     await initializeExpoAppAsync(packageName);
+
+    // 4. yarn + install deps
+    Logger.log('🧶 Installing js dependencies');
+    await spawnAsync('yarn', ['install'], { cwd: projectRoot });
+
     await runPrebuildAsync(packageName);
 
     copyTemplateFiles(packageName);

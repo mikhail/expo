@@ -36,16 +36,24 @@ export default function App({ title = '' }) {
 }
 
 function ExpoStoryApp({ title = '' }) {
+  const parentStoryIds = Object.keys(storyData);
+
   return (
     <RNStack.Navigator>
-      <RNStack.Screen name="Home" component={Home} options={{ title }} />
+      {parentStoryIds.length > 1 && (
+        <RNStack.Screen name="Home" component={Home} options={{ title }} />
+      )}
       <RNStack.Screen
         name="Selected Stories"
         component={SelectedStories}
         options={({ route }) => {
           return {
-            title: route.params.title || '',
+            title: route.params?.title || '',
           };
+        }}
+        initialParams={{
+          title: parentStoryIds.length === 1 ? storyData[parentStoryIds[0]].title : '',
+          parentStoryId: parentStoryIds.length === 1 ? parentStoryIds[0] : undefined,
         }}
       />
       <RNStack.Screen

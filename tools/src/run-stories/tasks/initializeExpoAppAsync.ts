@@ -2,7 +2,6 @@ import fs from 'fs';
 import path from 'path';
 
 import { runExpoCliAsync } from '../../ExpoCLI';
-import Logger from '../../Logger';
 import { getExamplesRoot, getPackageRoot, getProjectName, getProjectRoot } from '../helpers';
 
 export async function initializeExpoAppAsync(packageName: string) {
@@ -52,25 +51,12 @@ export async function initializeExpoAppAsync(packageName: string) {
     ...extraNodeModules,
   };
 
-  mergedPkg['expo-yarn-workspaces'] = {
-    symlinks: [...mergedPkg['expo-yarn-workspaces'].symlinks, ...Object.keys(extraNodeModules)],
-  };
-
   mergedPkg.name = projectName;
 
   fs.writeFileSync(
     path.resolve(projectRoot, 'package.json'),
     JSON.stringify(mergedPkg, null, '\t')
   );
-
-  const expoDeps = Object.keys(packagePkg.expoStories?.packages) || [];
-
-  // 4. yarn + install deps
-  Logger.log('🧶 Installing js dependencies');
-  await runExpoCliAsync('install', expoDeps, {
-    cwd: projectRoot,
-    stdio: 'ignore',
-  });
 
   // remove .git repo for newly built project
   // @ts-ignore
