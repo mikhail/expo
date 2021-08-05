@@ -2,7 +2,7 @@ import { IosPlist } from '@expo/xdl';
 import fs from 'fs';
 import path from 'path';
 
-import { getProjectRoot, getTargetName } from '../helpers';
+import { getProjectName, getProjectRoot, getTargetName } from '../helpers';
 import { addDevMenu } from './addDevMenu';
 
 export function copyTemplateFiles(packageName: string) {
@@ -61,5 +61,17 @@ export function copyTemplateFiles(packageName: string) {
     return config;
   });
 
+  const projectAppJsPath = path.resolve(projectRoot, 'App.js');
   fs.copyFileSync(path.resolve(templateRoot, 'App.js'), path.resolve(projectRoot, 'App.js'));
+
+  // add title prop
+  const appTitle = getProjectName(packageName)
+    .split('-')
+    .map((str) => str.charAt(0).toUpperCase() + str.slice(1))
+    .join(' ');
+
+  let appJs = fs.readFileSync(projectAppJsPath, { encoding: 'utf-8' });
+  appJs = appJs.replace('{{ title }}', appTitle);
+
+  fs.writeFileSync(projectAppJsPath, appJs, { encoding: 'utf-8' });
 }

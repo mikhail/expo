@@ -1,9 +1,8 @@
 import { lightTheme, shadows, spacing } from '@expo/styleguide-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
 import { View, SafeAreaView, Pressable, Text, StyleSheet, ScrollView } from 'react-native';
-import { Stack, StackContainer } from 'react-native-async-stack';
-
-import { ExpoStoryLoader } from './ExpoStoryLoader';
 
 // this is resolved via customization (extraNodeModules) in metro-config / webpack-config
 const stories = require('generated-expo-stories');
@@ -26,15 +25,43 @@ Object.keys(stories).forEach(key => {
   storyData[parentConfig.id].stories.push(storyConfig);
 });
 
-export default function App() {
+const RNStack = createStackNavigator();
+
+export default function App({ title = '' }) {
   return (
-    <StackContainer>
-      <ExpoStoryApp />
-    </StackContainer>
+    <NavigationContainer>
+      <ExpoStoryApp title={title} />
+    </NavigationContainer>
   );
 }
 
-function ExpoStoryApp() {
+function ExpoStoryApp({ title = '' }) {
+  return (
+    <RNStack.Navigator>
+      <RNStack.Screen name="Home" component={Home} options={{ title }} />
+      <RNStack.Screen
+        name="Selected Stories"
+        component={SelectedStories}
+        options={({ route }) => {
+          return {
+            title: route.params.title || '',
+          };
+        }}
+      />
+      <RNStack.Screen
+        name="Stories Detail"
+        component={StoriesDetail}
+        options={({ route }) => {
+          return {
+            title: route.params.title || '',
+          };
+        }}
+      />
+    </RNStack.Navigator>
+  );
+}
+
+function Home({ navigation }) {
   const parentStories: any[] = [];
 
   Object.keys(storyData).forEach(key => {
@@ -42,23 +69,20 @@ function ExpoStoryApp() {
     parentStories.push(parentStory);
   });
 
+  function onStorySelected(story) {
+    navigation.navigate('Selected Stories', { parentStoryId: story.id, title: story.title });
+  }
+
   return (
     <SafeAreaView style={styles.flexContainer}>
       <View style={styles.flexContainer}>
-        <Text style={styles.storyTitle}>Expo Story Loader</Text>
-
         <ScrollView style={styles.storyButtonsContainer}>
           {parentStories.map((story: any) => {
             return (
               <StoryButton
                 key={story.id}
                 title={story.title}
-                onPress={() => {
-                  Stack.push({
-                    element: <StoriesScreen parentStoryId={story.id} />,
-                    headerProps: { title: story.title },
-                  });
-                }}
+                onPress={() => onStorySelected(story)}
               />
             );
           })}
@@ -68,14 +92,24 @@ function ExpoStoryApp() {
   );
 }
 
-function StoriesScreen({ parentStoryId }) {
+function SelectedStories({ navigation, route }) {
   const parentStories: any = [];
+
+  const { parentStoryId = '' } = route.params || {};
 
   Object.keys(storyData).forEach(key => {
     if (key === parentStoryId) {
       parentStories.push(storyData[key]);
     }
   });
+
+  function onStorySelected(story, displayStoryTitle = false) {
+    navigation.navigate('Stories Detail', {
+      selectedStoryId: story.id,
+      title: story.name,
+      displayStoryTitle,
+    });
+  }
 
   return (
     <SafeAreaView style={styles.flexContainer}>
@@ -84,29 +118,13 @@ function StoriesScreen({ parentStoryId }) {
           return (
             <View key={story.id}>
               {story.stories.map(s => {
-                return (
-                  <StoryButton
-                    key={s.id}
-                    title={s.name}
-                    onPress={() => {
-                      Stack.push({
-                        element: <ExpoStoryLoader selectedStoryId={s.id} />,
-                        headerProps: { title: s.name },
-                      });
-                    }}
-                  />
-                );
+                return <StoryButton key={s.id} title={s.name} onPress={() => onStorySelected(s)} />;
               })}
               {story.stories.length > 1 && (
                 <StoryButton
                   title="See All"
                   color={lightTheme.button.tertiary.background}
-                  onPress={() => {
-                    Stack.push({
-                      element: <ExpoStoryLoader selectedStoryId={story.id} displayStoryTitle />,
-                      headerProps: { title: `${story.title} Stories` },
-                    });
-                  }}
+                  onPress={() => onStorySelected(story, true)}
                 />
               )}
             </View>
@@ -114,6 +132,38 @@ function StoriesScreen({ parentStoryId }) {
         })}
       </ScrollView>
     </SafeAreaView>
+  );
+}
+
+function StoriesDetail({ navigation, route }) {
+  const { selectedStoryId = '', displayStoryTitle = true } = route.params || {};
+
+  const selectedStories = [];
+
+  if (selectedStoryId !== '') {
+    Object.keys(stories).forEach(key => {
+      if (key.startsWith(selectedStoryId)) {
+        // @ts-ignore
+        selectedStories.push(stories[key]);
+      }
+    });
+  }
+
+  return (
+    <View style={StyleSheet.absoluteFill}>
+      <SafeAreaView style={styles.flexContainer}>
+        <ScrollView style={styles.flexContainer}>
+          {Object.entries(selectedStories).map(([key, story]: [string, any]) => {
+            return (
+              <View key={`${key}`} style={styles.storyRow}>
+                {displayStoryTitle && <Text style={styles.storyTitle}>{story?.name || ''}</Text>}
+                {React.createElement(story)}
+              </View>
+            );
+          })}
+        </ScrollView>
+      </SafeAreaView>
+    </View>
   );
 }
 
@@ -132,10 +182,19 @@ const styles = StyleSheet.create({
     backgroundColor: lightTheme.background.default,
     padding: spacing[3],
   },
-  storyTitle: {
-    fontSize: 32,
-    fontWeight: 'bold',
+
+  storyRow: {
+    paddingHorizontal: spacing[2],
+    paddingVertical: spacing[3],
+    borderBottomWidth: 1,
+    borderColor: lightTheme.border.default,
   },
+  storyTitle: {
+    marginBottom: spacing[2],
+    fontSize: 20,
+    fontWeight: '500',
+  },
+
   storyButtonsContainer: {
     padding: spacing[4],
     backgroundColor: lightTheme.background.default,
