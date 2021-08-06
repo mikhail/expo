@@ -12,7 +12,8 @@
     "test": "expo-module test",
     "prepare": "expo-module prepare",
     "prepublishOnly": "expo-module prepublishOnly",
-    "expo-module": "expo-module"
+    "expo-module": "expo-module",
+    "start:examples": "et run-stories"
   },
   "keywords": [
     "react-native",
@@ -41,5 +42,10 @@
   "devDependencies": {
     "@types/uuid": "^3.4.7",
     "expo-module-scripts": "^2.0.0"
+  },
+  "expoStories": {
+    "packages": {
+      "expo-contacts": "~9.2.0"
+    }
   }
 }
