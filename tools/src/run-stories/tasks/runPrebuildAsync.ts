@@ -5,11 +5,9 @@ import {
   withIosExpoPlugins,
   getLegacyExpoPlugins,
 } from '@expo/prebuild-config';
-import spawnAsync from '@expo/spawn-async';
 import fs from 'fs';
 import path from 'path';
 
-import Logger from '../../Logger';
 import { getPackageRoot, getProjectRoot, getTargetName } from '../helpers';
 
 export async function runPrebuildAsync(packageName: string) {
@@ -32,16 +30,20 @@ export async function runPrebuildAsync(packageName: string) {
     bundleIdentifier: bundleId,
   };
 
+  const legacyPlugins = getLegacyExpoPlugins();
+  const packageRoot = getPackageRoot(packageName);
+  const packagePkg = require(path.resolve(packageRoot, 'package.json'));
+
+  appJson.expo.plugins = Object.keys(packagePkg.expoStories?.packages || {}).filter(
+    (pkg) => !legacyPlugins.includes(pkg)
+  );
+
   fs.writeFileSync(appJsonPath, JSON.stringify(appJson, null, '\t'), { encoding: 'utf-8' });
 
   let { exp: config } = getConfig(projectRoot);
 
-  const packageRoot = getPackageRoot(packageName);
-  const packagePkg = require(path.resolve(packageRoot, 'package.json'));
-
   const plugins: string[] = [];
   const packages = packagePkg.expoStories?.packages || {};
-  const legacyPlugins = getLegacyExpoPlugins();
 
   Object.keys(packages).forEach((pkg: string) => {
     if (legacyPlugins.includes(pkg)) {
@@ -73,7 +75,7 @@ export async function runPrebuildAsync(packageName: string) {
     bundleIdentifier: config.ios.bundleIdentifier,
   });
 
-  await compileModsAsync(config, {
+  return compileModsAsync(config, {
     projectRoot,
     platforms: ['ios', 'android'],
     assertMissingModProviders: false,
