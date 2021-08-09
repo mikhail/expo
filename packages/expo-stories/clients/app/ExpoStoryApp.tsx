@@ -124,7 +124,7 @@ function SelectedStories({ navigation, route }) {
       <ScrollView style={styles.flexContainer}>
         {parentStories.map(story => {
           return (
-            <View key={story.id}>
+            <View key={story.id} style={styles.storyButtonRow}>
               {story.stories.map(s => {
                 return <StoryButton key={s.id} title={s.name} onPress={() => onStorySelected(s)} />;
               })}
@@ -188,24 +188,18 @@ const styles = StyleSheet.create({
   flexContainer: {
     flex: 1,
     backgroundColor: lightTheme.background.default,
-    padding: spacing[3],
   },
-
-  storyRow: {
-    paddingHorizontal: spacing[2],
-    paddingVertical: spacing[3],
-    borderBottomWidth: 1,
-    borderColor: lightTheme.border.default,
+  storyRow: {},
+  storyButtonRow: {
+    padding: spacing[4],
   },
   storyTitle: {
     marginBottom: spacing[2],
     fontSize: 20,
     fontWeight: '500',
   },
-
   storyButtonsContainer: {
     padding: spacing[4],
-    backgroundColor: lightTheme.background.default,
   },
   storyButton: {
     borderRadius: 4,
