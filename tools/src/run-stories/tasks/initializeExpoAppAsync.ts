@@ -20,9 +20,6 @@ export async function initializeExpoAppAsync(packageName: string) {
     stdio: 'ignore',
   });
 
-  // expo install -- these will setup the app.config plugins section which is necessary for applying mods
-  // package.json
-
   const packageRoot = getPackageRoot(packageName);
   // eslint-disable-next-line
   const templateRoot = path.resolve(projectRoot, '../../template-files/stories-templates');

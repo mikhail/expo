@@ -1,12 +1,8 @@
 import bunyan from '@expo/bunyan';
-import { runMetroDevServerAsync } from '@expo/dev-server';
-import spawnAsync from '@expo/spawn-async';
 import { LogUpdater, PackagerLogsStream, LogRecord, ProjectUtils } from '@expo/xdl';
 import chalk from 'chalk';
 import findLastIndex from 'lodash/findLastIndex';
 import ProgressBar from 'progress';
-
-import { getProjectRoot, getProjectName } from '../helpers';
 
 export function createMetroLogger(projectRoot: string) {
   const logLines = (msg: any, logFn: (...args: any[]) => void) => {
