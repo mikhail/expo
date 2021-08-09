@@ -1,5 +1,5 @@
 import * as Contacts from 'expo-contacts';
-import { Button, Container } from 'expo-stories/shared/components';
+import { Button } from 'expo-stories/shared/components';
 import * as React from 'react';
 import { Share } from 'react-native';
 
@@ -12,7 +12,7 @@ type IWriteContactsToFile = {
   description?: string;
 };
 
-export function WriteContactsToFile({ query, contactToShare, description }: IWriteContactsToFile) {
+export function WriteContactsToFile({ query, contactToShare }: IWriteContactsToFile) {
   const [contact, setContact] = React.useState<Contacts.Contact | null>(null);
 
   async function onAddContactPress() {
@@ -34,9 +34,9 @@ export function WriteContactsToFile({ query, contactToShare, description }: IWri
   }
 
   return (
-    <Container labelTop={description}>
+    <>
       <ContactCard contact={contact} />
-      
+
       {contact && <Button label="Share" onPress={onSharePress} />}
 
       <Button
@@ -46,6 +46,6 @@ export function WriteContactsToFile({ query, contactToShare, description }: IWri
       />
 
       {/* <Text>{JSON.stringify({ url }, null, '\t')}</Text> */}
-    </Container>
+    </>
   );
 }

@@ -1,6 +1,7 @@
 //  @todo - add ios platform examples for contacts
 
 import * as Contacts from 'expo-contacts';
+import { Container } from 'expo-stories/shared/components';
 import * as React from 'react';
 
 import {
@@ -17,8 +18,12 @@ import {
 export function PermissionsExamples() {
   return (
     <>
-      <IsAvailable />
-      <Permissions />
+      <Container labelTop="Getting isAvailable">
+        <IsAvailable />
+      </Container>
+      <Container labelTop="Requesting Permissions">
+        <Permissions />
+      </Container>
     </>
   );
 }
@@ -30,15 +35,13 @@ PermissionsExamples.storyConfig = {
 export function AddContactsExample() {
   return (
     <>
-      <AddContact
-        contact={{ firstName: 'Andy', lastName: 'Smith' }}
-        description="Adding and removing a contact with first and last name"
-      />
+      <Container labelTop="Adding and removing a contact with first and last name">
+        <AddContact contact={{ firstName: 'Andy', lastName: 'Smith' }} />
+      </Container>
 
-      <AddContact
-        contact={{ nickname: 'Joe', firstName: 'Andy', lastName: 'Smith' }}
-        description="Adding and removing a contact with a nickname"
-      />
+      <Container labelTop="Adding and removing a contact with a nickname">
+        <AddContact contact={{ nickname: 'Joe', firstName: 'Andy', lastName: 'Smith' }} />
+      </Container>
     </>
   );
 }
@@ -50,8 +53,12 @@ AddContactsExample.storyConfig = {
 export function GetContactsExample() {
   return (
     <>
-      <GetContacts query={{ pageSize: 2 }} description="Queries 2 contacts" />
-      <GetContactById description="Queries a single contact by id" />
+      <Container labelTop="Queries 2 contacts">
+        <GetContacts query={{ pageSize: 2 }} />
+      </Container>
+      <Container labelTop="Queries a single contact by id">
+        <GetContactById />
+      </Container>
     </>
   );
 }
@@ -63,14 +70,15 @@ GetContactsExample.storyConfig = {
 export function UpdateContactsExample() {
   return (
     <>
-      <UpdateContact
-        initialContact={{ firstName: 'Andy', lastName: '123' }}
-        updates={{ lastName: 'Wow' }}
-      />
-      <PresentForm
-        initialContact={{ firstName: 'Andrew', lastName: 'Smith' }}
-        description="Presents form to update contact"
-      />
+      <Container labelTop="Updates contact's last name">
+        <UpdateContact
+          initialContact={{ firstName: 'Andy', lastName: '123' }}
+          updates={{ lastName: 'Wow' }}
+        />
+      </Container>
+      <Container labelTop="Presents form to update contact">
+        <PresentForm initialContact={{ firstName: 'Andrew', lastName: 'Smith' }} />
+      </Container>
     </>
   );
 }
@@ -82,11 +90,12 @@ UpdateContactsExample.storyConfig = {
 export function WriteContactsToFileExample() {
   return (
     <>
-      <WriteContactsToFile
-        contactToShare={{ firstName: 'Hello', lastName: 'Joe' }}
-        query={{ fields: [Contacts.Fields.FirstName] }}
-        description="Provides a shareable contacts file"
-      />
+      <Container labelTop="Provides a shareable contacts file">
+        <WriteContactsToFile
+          contactToShare={{ firstName: 'Hello', lastName: 'Joe' }}
+          query={{ fields: [Contacts.Fields.FirstName] }}
+        />
+      </Container>
     </>
   );
 }

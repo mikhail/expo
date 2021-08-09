@@ -1,5 +1,5 @@
 import * as Contacts from 'expo-contacts';
-import { Button, Container } from 'expo-stories/shared/components';
+import { Button } from 'expo-stories/shared/components';
 import * as React from 'react';
 import { Text } from 'react-native';
 
@@ -21,9 +21,9 @@ export function Permissions() {
   }
 
   return (
-    <Container>
+    <>
       <Button onPress={onRequestPermissions} label="Request Contact Permissions" />
       <Text>{JSON.stringify(status, null, '\t')}</Text>
-    </Container>
+    </>
   );
 }

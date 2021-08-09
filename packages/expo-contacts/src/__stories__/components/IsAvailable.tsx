@@ -1,5 +1,5 @@
 import * as Contacts from 'expo-contacts';
-import { Button, Container } from 'expo-stories/shared/components';
+import { Button } from 'expo-stories/shared/components';
 import * as React from 'react';
 import { Text } from 'react-native';
 
@@ -20,9 +20,9 @@ export function IsAvailable() {
   }
 
   return (
-    <Container>
+    <>
       <Button onPress={onIsAvailablePress} label="Fetch Is Available" />
       <Text>{JSON.stringify({ isAvailable }, null, '\t')}</Text>
-    </Container>
+    </>
   );
 }

@@ -1,5 +1,5 @@
 import * as Contacts from 'expo-contacts';
-import { Button, Container } from 'expo-stories/shared/components';
+import { Button } from 'expo-stories/shared/components';
 import * as React from 'react';
 
 import { useContact } from '../helpers';
@@ -8,10 +8,9 @@ import { ContactCard } from './ContactCard';
 type IUpdateContact = {
   updates?: Partial<Contacts.Contact>;
   initialContact?: Partial<Contacts.Contact>;
-  description?: string;
 };
 
-export function UpdateContact({ updates, initialContact, description }: IUpdateContact) {
+export function UpdateContact({ updates, initialContact }: IUpdateContact) {
   const { contact, updateContactAsync, addContactAsync, removeContactAsync } = useContact(
     initialContact
   );
@@ -21,7 +20,7 @@ export function UpdateContact({ updates, initialContact, description }: IUpdateC
   }
 
   return (
-    <Container labelTop={description}>
+    <>
       <ContactCard contact={contact} />
 
       {contact && <Button onPress={onUpdateContactPress} label="Update Contact" />}
@@ -32,6 +31,6 @@ export function UpdateContact({ updates, initialContact, description }: IUpdateC
         variant={contact ? 'secondary' : 'primary'}
       />
       {/* <Text>{JSON.stringify(contact, null, '\t')}</Text> */}
-    </Container>
+    </>
   );
 }

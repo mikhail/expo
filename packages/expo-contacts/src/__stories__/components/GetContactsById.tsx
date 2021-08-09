@@ -1,5 +1,5 @@
 import * as Contacts from 'expo-contacts';
-import { Button, Container } from 'expo-stories/shared/components';
+import { Button } from 'expo-stories/shared/components';
 import * as React from 'react';
 
 import { ContactCard } from './ContactCard';
@@ -7,10 +7,9 @@ import { ContactCard } from './ContactCard';
 type IGetContactById = {
   id?: string;
   fields?: Contacts.FieldType[];
-  description?: string;
 };
 
-export function GetContactById({ id, fields, description = '' }: IGetContactById) {
+export function GetContactById({ id, fields }: IGetContactById) {
   const [contact, setContact] = React.useState<Contacts.Contact | null>(null);
   const [didFetch, setDidFetch] = React.useState(false);
 
@@ -36,7 +35,7 @@ export function GetContactById({ id, fields, description = '' }: IGetContactById
   }
 
   return (
-    <Container labelTop={description}>
+    <>
       <ContactCard contact={contact} />
       <Button
         onPress={didFetch ? onResetPress : onGetContactsPress}
@@ -44,6 +43,6 @@ export function GetContactById({ id, fields, description = '' }: IGetContactById
         variant={didFetch ? 'secondary' : 'primary'}
       />
       {/* <Text>{JSON.stringify(contact, null, '\t')}</Text> */}
-    </Container>
+    </>
   );
 }
