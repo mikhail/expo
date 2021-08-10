@@ -22,7 +22,10 @@ Object.keys(stories).forEach(key => {
     };
   }
 
-  storyData[parentConfig.id].stories.push(storyConfig);
+  storyData[parentConfig.id].stories.push({
+    ...storyConfig,
+    parentId: parentConfig.id,
+  });
 });
 
 const RNStack = createStackNavigator();
@@ -149,16 +152,22 @@ function StoriesDetail({ navigation, route }) {
   let selectedStories = [];
 
   if (selectedStoryId !== '') {
-    Object.keys(storyData).forEach(key => {
-      if (key.startsWith(selectedStoryId)) {
+    Object.keys(storyData).forEach(parentId => {
+      if (selectedStoryId.includes(parentId)) {
         // @ts-ignore
         const matchingStories =
-          storyData[key].stories.map(story => {
-            return {
-              ...story,
-              component: stories[story.id],
-            };
-          }) ?? [];
+          storyData[parentId].stories
+            .map(story => {
+              if (story.id.startsWith(selectedStoryId)) {
+                return {
+                  ...story,
+                  component: stories[story.id],
+                };
+              }
+
+              return null;
+            })
+            .filter(Boolean) ?? [];
 
         selectedStories = [...selectedStories, ...matchingStories];
       }
