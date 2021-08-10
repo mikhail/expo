@@ -151,7 +151,6 @@ function StoriesDetail({ navigation, route }) {
   if (selectedStoryId !== '') {
     Object.keys(storyData).forEach(key => {
       if (key.startsWith(selectedStoryId)) {
-        console.log({ match: storyData[key] });
         // @ts-ignore
         const matchingStories =
           storyData[key].stories.map(story => {
