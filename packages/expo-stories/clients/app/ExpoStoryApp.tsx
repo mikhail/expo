@@ -25,8 +25,6 @@ Object.keys(stories).forEach(key => {
   storyData[parentConfig.id].stories.push(storyConfig);
 });
 
-console.log({ storyData });
-
 const RNStack = createStackNavigator();
 
 export default function App({ title = '' }) {
@@ -173,7 +171,6 @@ function StoriesDetail({ navigation, route }) {
       <SafeAreaView style={styles.flexContainer}>
         <ScrollView style={styles.flexContainer}>
           {selectedStories.map((story, index) => {
-            console.log({ story });
             return (
               <View key={`${story.id}`} style={styles.storyRow}>
                 {displayStoryTitle && <Text style={styles.storyTitle}>{story?.name || ''}</Text>}
