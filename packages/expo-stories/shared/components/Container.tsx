@@ -2,6 +2,8 @@ import { spacing, lightTheme, ChevronDownIcon, iconSize } from '@expo/styleguide
 import * as React from 'react';
 import { View, StyleSheet, Text, ViewProps, TouchableOpacity } from 'react-native';
 
+import { Toggle } from './Toggle';
+
 type ContainerProps = ViewProps & {
   labelTop?: string;
   labelBottom?: string;
@@ -17,15 +19,18 @@ export function Container({
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (
-    <View style={[styles.container, isOpen && styles.openContainer, style]} {...rest}>
-      <TouchableOpacity style={styles.descriptionContainer} onPress={() => setIsOpen(!isOpen)}>
-        <Text style={styles.description}>{labelTop}</Text>
-        <View style={[styles.chevonContainer, isOpen ? styles.chevronOpen : styles.chevronClosed]}>
-          <ChevronDownIcon size={iconSize.large} color={lightTheme.icon.default} />
-        </View>
-      </TouchableOpacity>
-      {isOpen && <View style={styles.storyComponentContainer}>{children}</View>}
-    </View>
+    <Toggle>
+      <View style={[styles.container, isOpen && styles.openContainer, style]} {...rest}>
+        <TouchableOpacity style={styles.descriptionContainer} onPress={() => setIsOpen(!isOpen)}>
+          <Text style={styles.description}>{labelTop}</Text>
+          <View
+            style={[styles.chevonContainer, isOpen ? styles.chevronOpen : styles.chevronClosed]}>
+            <ChevronDownIcon size={iconSize.large} color={lightTheme.icon.default} />
+          </View>
+        </TouchableOpacity>
+        {isOpen && <View style={styles.storyComponentContainer}>{children}</View>}
+      </View>
+    </Toggle>
   );
 }
 
