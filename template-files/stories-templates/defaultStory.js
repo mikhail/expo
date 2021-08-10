@@ -1,7 +1,12 @@
+import { Container } from 'expo-stories/shared/components';
 import * as React from 'react';
 import { Text } from 'react-native';
 
-export const MyDefaultStory = () => <Text>Add your stories here!</Text>;
+export const MyDefaultStory = () => (
+  <Container labelTop="Default Story">
+    <Text>Add your stories here!</Text>
+  </Container>
+);
 
 MyDefaultStory.storyConfig = {
   name: 'My Default Story Name',

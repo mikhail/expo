@@ -25,6 +25,8 @@ Object.keys(stories).forEach(key => {
   storyData[parentConfig.id].stories.push(storyConfig);
 });
 
+console.log({ storyData });
+
 const RNStack = createStackNavigator();
 
 export default function App({ title = '' }) {
@@ -146,13 +148,22 @@ function SelectedStories({ navigation, route }) {
 function StoriesDetail({ navigation, route }) {
   const { selectedStoryId = '', displayStoryTitle = true } = route.params || {};
 
-  const selectedStories = [];
+  let selectedStories = [];
 
   if (selectedStoryId !== '') {
-    Object.keys(stories).forEach(key => {
+    Object.keys(storyData).forEach(key => {
       if (key.startsWith(selectedStoryId)) {
+        console.log({ match: storyData[key] });
         // @ts-ignore
-        selectedStories.push(stories[key]);
+        const matchingStories =
+          storyData[key].stories.map(story => {
+            return {
+              ...story,
+              component: stories[story.id],
+            };
+          }) ?? [];
+
+        selectedStories = [...selectedStories, ...matchingStories];
       }
     });
   }
@@ -161,11 +172,12 @@ function StoriesDetail({ navigation, route }) {
     <View style={StyleSheet.absoluteFill}>
       <SafeAreaView style={styles.flexContainer}>
         <ScrollView style={styles.flexContainer}>
-          {Object.entries(selectedStories).map(([key, story]: [string, any]) => {
+          {selectedStories.map((story, index) => {
+            console.log({ story });
             return (
-              <View key={`${key}`} style={styles.storyRow}>
+              <View key={`${story.id}`} style={styles.storyRow}>
                 {displayStoryTitle && <Text style={styles.storyTitle}>{story?.name || ''}</Text>}
-                {React.createElement(story)}
+                {React.createElement(story.component)}
               </View>
             );
           })}
@@ -194,9 +206,12 @@ const styles = StyleSheet.create({
     padding: spacing[4],
   },
   storyTitle: {
-    marginBottom: spacing[2],
+    paddingVertical: spacing[2],
+    paddingHorizontal: spacing[3],
+    marginTop: spacing[4],
+    marginBottom: spacing[1],
     fontSize: 20,
-    fontWeight: '500',
+    fontWeight: '700',
   },
   storyButtonsContainer: {
     padding: spacing[4],
