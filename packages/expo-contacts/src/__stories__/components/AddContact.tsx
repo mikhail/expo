@@ -21,7 +21,6 @@ export function AddContact({ contact: initialContact }: IAddContact) {
         label={contact ? 'Remove Contact' : 'Add Contact'}
         variant={contact ? 'secondary' : 'primary'}
       />
-      {/* <Text>{JSON.stringify(createdContact, null, '\t')}</Text> */}
     </>
   );
 }

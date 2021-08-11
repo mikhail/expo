@@ -1,5 +1,7 @@
-import { borderRadius, shadows, spacing, lightTheme } from '@expo/styleguide-native';
+import { borderRadius, shadows, spacing, lightTheme, LogsIcon } from '@expo/styleguide-native';
 import * as Contacts from 'expo-contacts';
+import { Toggle } from 'expo-stories/shared/components';
+import { Json } from 'expo-stories/shared/components/Json';
 import * as React from 'react';
 import { View, StyleSheet, Text, Image } from 'react-native';
 
@@ -17,22 +19,34 @@ export function ContactCard({ contact }: IContactCard) {
   }
 
   return (
-    <View style={styles.cardContainer}>
-      <View style={styles.photoNameContainer}>
-        <View style={styles.photo}>
-          {contact.imageAvailable && (
-            <Image source={{ uri: contact.image?.uri }} style={styles.photo} />
-          )}
+    <Toggle>
+      <View style={styles.cardContainer}>
+        <View style={styles.photoNameContainer}>
+          <View style={styles.photo}>
+            {contact.imageAvailable && (
+              <Image source={{ uri: contact.image?.uri }} style={styles.photo} />
+            )}
+          </View>
+          <Text style={styles.name}>{contact.name}</Text>
+
+          <View style={{ flex: 1 }} />
+
+          <Toggle.Button>
+            <LogsIcon size={24} color={lightTheme.button.primary.background} />
+          </Toggle.Button>
         </View>
-        <Text style={styles.name}>{contact.name}</Text>
+
+        <View style={styles.contactFieldsContainer}>
+          <ContactField fieldName="First Name" value={contact.firstName} />
+          <ContactField fieldName="Last Name" value={contact.lastName} />
+          <ContactField fieldName="Nickname" value={contact.nickname} />
+        </View>
       </View>
 
-      <View style={styles.contactFieldsContainer}>
-        <ContactField fieldName="First Name" value={contact.firstName} />
-        <ContactField fieldName="Last Name" value={contact.lastName} />
-        <ContactField fieldName="Nickname" value={contact.nickname} />
-      </View>
-    </View>
+      <Toggle.Area>
+        <Json json={contact} />
+      </Toggle.Area>
+    </Toggle>
   );
 }
 

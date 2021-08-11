@@ -1,7 +1,7 @@
 import * as Contacts from 'expo-contacts';
 import { Button } from 'expo-stories/shared/components';
+import { Json } from 'expo-stories/shared/components/Json';
 import * as React from 'react';
-import { Text } from 'react-native';
 
 export function IsAvailable() {
   const [isAvailable, setIsAvailable] = React.useState(null);
@@ -22,7 +22,7 @@ export function IsAvailable() {
   return (
     <>
       <Button onPress={onIsAvailablePress} label="Fetch Is Available" />
-      <Text>{JSON.stringify({ isAvailable }, null, '\t')}</Text>
+      <Json json={{ isAvailable }} />
     </>
   );
 }
