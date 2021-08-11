@@ -19,6 +19,7 @@ export async function runPrebuildAsync(packageName: string) {
   }
 
   const appJsonPath = path.resolve(projectRoot, 'app.json');
+
   const appJson = require(appJsonPath);
   const bundleId = `com.expostories.${targetName}`;
 
@@ -32,24 +33,21 @@ export async function runPrebuildAsync(packageName: string) {
 
   const legacyPlugins = getLegacyExpoPlugins();
   const packageRoot = getPackageRoot(packageName);
+
   const packagePkg = require(path.resolve(packageRoot, 'package.json'));
 
-  appJson.expo.plugins = Object.keys(packagePkg.expoStories?.packages || {}).filter(
-    (pkg) => !legacyPlugins.includes(pkg)
-  );
+  // @todo - update logic around applying config plugins
+  // search node_modules / deps instead of whatever is in config?
+  appJson.expo.plugins =
+    packagePkg.expoStories?.plugins || [].filter((pkg) => !legacyPlugins.includes(pkg));
 
   fs.writeFileSync(appJsonPath, JSON.stringify(appJson, null, '\t'), { encoding: 'utf-8' });
 
-  let { exp: config } = getConfig(projectRoot);
-
-  const plugins: string[] = [];
-  const packages = packagePkg.expoStories?.packages || {};
-
-  Object.keys(packages).forEach((pkg: string) => {
-    if (legacyPlugins.includes(pkg)) {
-      plugins.push(pkg);
-    }
+  let { exp: config } = getConfig(projectRoot, {
+    skipSDKVersionRequirement: true,
   });
+
+  const plugins = appJson.expo.plugins;
 
   plugins.reduce((prev, plugin) => {
     return withStaticPlugin(prev, {

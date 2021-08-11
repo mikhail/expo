@@ -2,24 +2,25 @@ import { spacing, lightTheme, ChevronDownIcon, iconSize } from '@expo/styleguide
 import * as React from 'react';
 import { View, StyleSheet, Text, ViewProps, TouchableOpacity } from 'react-native';
 
-import { Toggle } from './Toggle';
-
 type ContainerProps = ViewProps & {
   labelTop?: string;
   labelBottom?: string;
   children?: React.ReactNode;
 };
 
-export function Container({
-  children,
-  labelTop = 'Description Missing',
-  style,
-  ...rest
-}: ContainerProps) {
+export function Container({ children, labelTop, style, ...rest }: ContainerProps) {
   const [isOpen, setIsOpen] = React.useState(false);
 
+  if (!labelTop) {
+    return (
+      <View style={[styles.container, style]} {...rest}>
+        <View style={styles.storyComponentContainer}>{children}</View>
+      </View>
+    );
+  }
+
   return (
-    <Toggle>
+    <>
       <View style={[styles.container, isOpen && styles.openContainer, style]} {...rest}>
         <TouchableOpacity style={styles.descriptionContainer} onPress={() => setIsOpen(!isOpen)}>
           <Text style={styles.description}>{labelTop}</Text>
@@ -30,7 +31,7 @@ export function Container({
         </TouchableOpacity>
         {isOpen && <View style={styles.storyComponentContainer}>{children}</View>}
       </View>
-    </Toggle>
+    </>
   );
 }
 

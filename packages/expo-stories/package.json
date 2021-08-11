@@ -7,7 +7,7 @@
   "license": "MIT",
   "files": [
     "clients/*",
-    "shared/*",
+    "components/*",
     "types/*",
     "metro-config.js",
     "webpack-config",

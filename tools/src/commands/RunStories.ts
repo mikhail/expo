@@ -56,6 +56,7 @@ async function action(name: string, { platform, rebuild = false, clearCache = fa
     Logger.log('🧶 Installing js dependencies');
     await spawnAsync('yarn', ['install'], { cwd: projectRoot });
 
+    Logger.log('🔌 Applying config plugins');
     await runPrebuildAsync(packageName);
 
     copyTemplateFiles(packageName);

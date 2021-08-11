@@ -11,7 +11,7 @@ const ToggleContext = React.createContext<ToggleContextProps>({
   setIsOpen: () => {},
 });
 
-export function Toggle({ children }) {
+function Container({ children }) {
   const [isOpen, setIsOpen] = React.useState(false);
 
   return <ToggleContext.Provider value={{ isOpen, setIsOpen }}>{children}</ToggleContext.Provider>;
@@ -33,5 +33,8 @@ function Button({ children }) {
   return <TouchableOpacity onPress={() => setIsOpen(!isOpen)}>{children}</TouchableOpacity>;
 }
 
-Toggle.Area = Area;
-Toggle.Button = Button;
+export const Toggle = {
+  Container,
+  Button,
+  Area,
+};

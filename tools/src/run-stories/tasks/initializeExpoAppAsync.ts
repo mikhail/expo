@@ -43,12 +43,13 @@ export async function initializeExpoAppAsync(packageName: string) {
   // remove dependencies from excluded autolinked packages
   const extraNodeModules: any = packagePkg.expoStories?.packages ?? {};
 
+  mergedPkg.name = projectName;
+
   mergedPkg.dependencies = {
     ...mergedPkg.dependencies,
     ...extraNodeModules,
+    [packagePkg.name]: `~${packagePkg.version}`,
   };
-
-  mergedPkg.name = projectName;
 
   fs.writeFileSync(
     path.resolve(projectRoot, 'package.json'),
