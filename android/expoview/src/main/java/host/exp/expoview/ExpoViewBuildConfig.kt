@@ -2,6 +2,6 @@
 package host.exp.expoview
 
 object ExpoViewBuildConfig {
-  var USE_INTERNET_KERNEL = true
-  var DEBUG = false
+  @JvmStatic var USE_INTERNET_KERNEL = true
+  @JvmStatic var DEBUG = false
 }
