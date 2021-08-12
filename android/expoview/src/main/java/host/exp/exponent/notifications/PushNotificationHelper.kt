@@ -339,6 +339,6 @@ class PushNotificationHelper {
   }
 
   init {
-    NativeModuleDepsProvider.getInstance().inject(PushNotificationHelper::class.java, this)
+    NativeModuleDepsProvider.instance.inject(PushNotificationHelper::class.java, this)
   }
 }
