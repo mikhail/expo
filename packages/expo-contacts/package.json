@@ -44,8 +44,8 @@
     "expo-module-scripts": "^2.0.0"
   },
   "expoStories": {
-    "packages": {
-      "expo-contacts": "~9.2.0"
-    }
+    "plugins": [
+      "expo-contacts"
+    ]
   }
 }

@@ -1,17 +1,17 @@
 import * as Contacts from 'expo-contacts';
-import { Button } from 'expo-stories/shared/components';
+import { Button } from 'expo-stories/components';
 import * as React from 'react';
 
 import { useContact } from '../helpers';
 import { ContactCard } from './ContactCard';
 
-type IPresentForm = {
+type PresentFormViewProps = {
   initialContact?: Partial<Contacts.Contact>;
   formOptions?: Contacts.FormOptions;
 };
 
 // @todo - update docs on how to properly use this
-export function PresentForm({ initialContact, formOptions }: IPresentForm) {
+export function PresentFormView({ initialContact, formOptions }: PresentFormViewProps) {
   const { contact, addContactAsync, removeContactAsync, updateContactAsync } = useContact(
     initialContact
   );
@@ -35,7 +35,6 @@ export function PresentForm({ initialContact, formOptions }: IPresentForm) {
         onPress={contact ? removeContactAsync : addContactAsync}
         variant={contact ? 'secondary' : 'primary'}
       />
-      {/* <Text>{JSON.stringify(contact, null, '\t')}</Text> */}
     </>
   );
 }

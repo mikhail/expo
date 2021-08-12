@@ -1,4 +1,4 @@
-import { TestRunner } from 'expo-stories/shared/components/TestRunner';
+import { TestRunner } from 'expo-stories/components';
 import * as React from 'react';
 
 export function ContactTests() {

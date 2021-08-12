@@ -1,14 +1,14 @@
 import * as Contacts from 'expo-contacts';
-import { Button } from 'expo-stories/shared/components';
+import { Button } from 'expo-stories/components';
 import * as React from 'react';
 
 import { ContactCard } from './ContactCard';
 
-type IGetContacts = {
+type GetContactsListProps = {
   query?: Contacts.ContactQuery;
 };
 
-export function GetContacts({ query }: IGetContacts) {
+export function GetContactsList({ query }: GetContactsListProps) {
   const [contacts, setContacts] = React.useState([]);
   const [didFetch, setDidFetch] = React.useState(false);
 

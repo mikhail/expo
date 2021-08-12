@@ -1,15 +1,15 @@
 import * as Contacts from 'expo-contacts';
-import { Button } from 'expo-stories/shared/components';
+import { Button } from 'expo-stories/components';
 import * as React from 'react';
 
 import { useContact } from '../helpers';
 import { ContactCard } from './ContactCard';
 
-type IAddContact = {
+type AddContactViewProps = {
   contact: Partial<Contacts.Contact>;
 };
 
-export function AddContact({ contact: initialContact }: IAddContact) {
+export function AddContactView({ contact: initialContact }: AddContactViewProps) {
   const { contact, addContactAsync, removeContactAsync } = useContact(initialContact);
 
   return (

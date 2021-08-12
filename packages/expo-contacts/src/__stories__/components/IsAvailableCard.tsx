@@ -1,9 +1,8 @@
 import * as Contacts from 'expo-contacts';
-import { Button } from 'expo-stories/shared/components';
-import { Json } from 'expo-stories/shared/components/Json';
+import { Button, Json } from 'expo-stories/components';
 import * as React from 'react';
 
-export function IsAvailable() {
+export function IsAvailableCard() {
   const [isAvailable, setIsAvailable] = React.useState(null);
 
   async function getIsAvailable() {

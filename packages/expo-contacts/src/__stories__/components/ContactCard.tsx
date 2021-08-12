@@ -1,15 +1,14 @@
 import { borderRadius, shadows, spacing, lightTheme, LogsIcon } from '@expo/styleguide-native';
 import * as Contacts from 'expo-contacts';
-import { Toggle } from 'expo-stories/shared/components';
-import { Json } from 'expo-stories/shared/components/Json';
+import { Toggle, Json } from 'expo-stories/components';
 import * as React from 'react';
 import { View, StyleSheet, Text, Image } from 'react-native';
 
-type IContactCard = {
+type ContactCardProps = {
   contact?: Contacts.Contact;
 };
 
-export function ContactCard({ contact }: IContactCard) {
+export function ContactCard({ contact }: ContactCardProps) {
   if (!contact) {
     return (
       <View>
@@ -19,7 +18,7 @@ export function ContactCard({ contact }: IContactCard) {
   }
 
   return (
-    <Toggle>
+    <Toggle.Container>
       <View style={styles.cardContainer}>
         <View style={styles.photoNameContainer}>
           <View style={styles.photo}>
@@ -46,7 +45,7 @@ export function ContactCard({ contact }: IContactCard) {
       <Toggle.Area>
         <Json json={contact} />
       </Toggle.Area>
-    </Toggle>
+    </Toggle.Container>
   );
 }
 
