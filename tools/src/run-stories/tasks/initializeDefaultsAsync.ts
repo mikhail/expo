@@ -2,7 +2,6 @@ import spawnAsync from '@expo/spawn-async';
 import fs from 'fs';
 import path from 'path';
 
-import Logger from '../../Logger';
 import { getPackageRoot, getProjectRoot } from '../helpers';
 
 export async function initializeDefaultsAsync(packageName: string) {
@@ -12,21 +11,6 @@ export async function initializeDefaultsAsync(packageName: string) {
 
   let shouldWritePkg = false;
 
-  if (!pkg.expoStories) {
-    Logger.log();
-    Logger.log(`Looks like this is the first time anyone has written stories for ${packageName}`);
-    Logger.log(`Configuring package with default template files`);
-    Logger.log();
-
-    // add expo stories field w/ packages
-    pkg.expoStories = {};
-    pkg.expoStories.packages = {
-      [pkg.name]: `~${pkg.version}`,
-    };
-
-    shouldWritePkg = true;
-  }
-
   // add et start script
   if (!pkg.scripts['start:examples']) {
     shouldWritePkg = true;
@@ -34,7 +18,7 @@ export async function initializeDefaultsAsync(packageName: string) {
   }
 
   if (shouldWritePkg) {
-    fs.writeFileSync(path.resolve(packageRoot, 'package.json'), JSON.stringify(pkg, null, '\t'), {
+    fs.writeFileSync(path.resolve(packageRoot, 'package.json'), JSON.stringify(pkg, null, ' '), {
       encoding: 'utf-8',
     });
 
@@ -59,7 +43,7 @@ export async function initializeDefaultsAsync(packageName: string) {
     }
 
     if (shouldWriteTsConfig) {
-      const tsconfigAsString = JSON.stringify(tsconfig, null, '\t');
+      const tsconfigAsString = JSON.stringify(tsconfig, null, ' ');
       const updatedFile = generatedComment + '\n' + tsconfigAsString;
 
       fs.writeFileSync(path.resolve(packageRoot, 'tsconfig.json'), updatedFile, {
