@@ -1,4 +1,4 @@
-import { Container } from 'expo-stories/shared/components';
+import { Container } from 'expo-stories/components';
 import * as React from 'react';
 
 import { AudioPlayer } from './components/AudioPlayer';
@@ -37,40 +37,35 @@ AudioSources.storyConfig = {
 export function AudioPlayback() {
   return (
     <>
-      <Container labelTop="Play Pause and Stop Audio">
-        <AudioPlayer
-          source={{ uri: remoteUrl }}
-          renderControls={props => <PlayPauseStopControls {...props} />}
-        />
-      </Container>
-
-      <Container labelTop="Skip Forwards and Backwards">
-        <AudioPlayer
-          source={{ uri: remoteUrl }}
-          renderControls={props => <SkipControls {...props} />}
-        />
-      </Container>
-
-      <Container labelTop="Set Playback Rates">
-        <AudioPlayer
-          source={{ uri: remoteUrl }}
-          renderControls={props => <PlaybackRateControls {...props} />}
-        />
-      </Container>
-
-      <Container labelTop="Set Volume">
-        <AudioPlayer
-          source={{ uri: remoteUrl }}
-          renderControls={props => <VolumeControls {...props} />}
-        />
-      </Container>
-
-      <Container labelTop="Set Looping">
-        <AudioPlayer
-          source={{ uri: remoteUrl }}
-          renderControls={props => <LoopingControls {...props} />}
-        />
-      </Container>
+      {[
+        {
+          label: 'Play Pause and Stop Audio',
+          ControlsComponent: PlayPauseStopControls,
+        },
+        {
+          label: 'Skip Forwards and Backwards',
+          ControlsComponent: SkipControls,
+        },
+        {
+          label: 'Set Playback Rates',
+          ControlsComponent: PlaybackRateControls,
+        },
+        {
+          label: 'Set Volume',
+          ControlsComponent: VolumeControls,
+        },
+        {
+          label: 'Set Looping',
+          ControlsComponent: LoopingControls,
+        },
+      ].map(({ label, ControlsComponent }) => (
+        <Container labelTop={label} key={label}>
+          <AudioPlayer
+            source={{ uri: remoteUrl }}
+            renderControls={props => <ControlsComponent {...props} />}
+          />
+        </Container>
+      ))}
     </>
   );
 }

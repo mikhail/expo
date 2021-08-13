@@ -1,5 +1,5 @@
 import { Asset } from 'expo-asset';
-import { Container } from 'expo-stories/shared/components';
+import { Container } from 'expo-stories/components';
 import * as React from 'react';
 
 import {
@@ -49,31 +49,32 @@ export function VideoPlayback() {
 
   return (
     <>
-      <Container labelTop="Play Pause and Stop Video">
-        <VideoPlayer
-          source={source}
-          renderControls={props => <PlayPauseStopControls {...props} P />}
-        />
-      </Container>
-
-      <Container labelTop="Skip Forwards and Backwards">
-        <VideoPlayer source={source} renderControls={props => <SkipControls {...props} />} />
-      </Container>
-
-      <Container labelTop="Set Playback Rates">
-        <VideoPlayer
-          source={source}
-          renderControls={props => <PlaybackRateControls {...props} />}
-        />
-      </Container>
-
-      <Container labelTop="Set Volume">
-        <VideoPlayer source={source} renderControls={props => <VolumeControls {...props} />} />
-      </Container>
-
-      <Container labelTop="Set Looping">
-        <VideoPlayer source={source} renderControls={props => <LoopingControls {...props} />} />
-      </Container>
+      {[
+        {
+          label: 'Play Pause and Stop Audio',
+          ControlsComponent: PlayPauseStopControls,
+        },
+        {
+          label: 'Skip Forwards and Backwards',
+          ControlsComponent: SkipControls,
+        },
+        {
+          label: 'Set Playback Rates',
+          ControlsComponent: PlaybackRateControls,
+        },
+        {
+          label: 'Set Volume',
+          ControlsComponent: VolumeControls,
+        },
+        {
+          label: 'Set Looping',
+          ControlsComponent: LoopingControls,
+        },
+      ].map(({ label, ControlsComponent }) => (
+        <Container labelTop={label} key={label}>
+          <VideoPlayer source={source} renderControls={props => <ControlsComponent {...props} />} />
+        </Container>
+      ))}
     </>
   );
 }

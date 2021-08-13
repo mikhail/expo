@@ -3,8 +3,7 @@ import Ionicons from '@expo/vector-icons/build/Ionicons';
 import Slider from '@react-native-community/slider';
 import { AVPlaybackStatus } from 'expo-av';
 import { Playback } from 'expo-av/build/AV';
-import { Toggle } from 'expo-stories/shared/components';
-import { Json } from 'expo-stories/shared/components/Json';
+import { Toggle, Json } from 'expo-stories/components';
 import * as React from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 
@@ -15,12 +14,20 @@ type PlayerControlsProps = {
 
 function ToggleStatusLogs({ status, children }) {
   return (
-    <Toggle>
+    <Toggle.Container>
       {children}
       <Toggle.Area>
         <Json json={status} />
       </Toggle.Area>
-    </Toggle>
+    </Toggle.Container>
+  );
+}
+
+function ToggleJsonButton() {
+  return (
+    <Toggle.Button>
+      <LogsIcon size={iconSize.large} color={lightTheme.button.primary.background} />
+    </Toggle.Button>
   );
 }
 
@@ -36,9 +43,7 @@ export function PlayPauseStopControls({ player, status }: PlayerControlsProps) {
 
         <View style={{ flex: 1 }} />
 
-        <Toggle.Button>
-          <LogsIcon size={iconSize.large} color={lightTheme.button.primary.background} />
-        </Toggle.Button>
+        <ToggleJsonButton />
       </View>
     </ToggleStatusLogs>
   );
@@ -68,9 +73,7 @@ export function SkipControls({ player, status }: PlayerControlsProps) {
 
         <View style={{ flex: 1 }} />
 
-        <Toggle.Button>
-          <LogsIcon size={iconSize.large} color={lightTheme.button.primary.background} />
-        </Toggle.Button>
+        <ToggleJsonButton />
       </View>
     </ToggleStatusLogs>
   );
@@ -131,9 +134,7 @@ export function PlaybackRateControls({ player, status }: PlayerControlsProps) {
 
         <View style={{ flex: 1 }} />
 
-        <Toggle.Button>
-          <LogsIcon size={iconSize.large} color={lightTheme.button.primary.background} />
-        </Toggle.Button>
+        <ToggleJsonButton />
       </View>
 
       <Text style={[styles.buttonLabel, styles.activeButtonLabel]}>
@@ -164,9 +165,7 @@ export function VolumeControls({ player, status }: PlayerControlsProps) {
 
         <View style={{ flex: 1 }} />
 
-        <Toggle.Button>
-          <LogsIcon size={iconSize.large} color={lightTheme.button.primary.background} />
-        </Toggle.Button>
+        <ToggleJsonButton />
       </View>
     </ToggleStatusLogs>
   );
@@ -215,9 +214,7 @@ export function LoopingControls({ player, status }: PlayerControlsProps) {
 
         <View style={{ flex: 1 }} />
 
-        <Toggle.Button>
-          <LogsIcon size={iconSize.large} color={lightTheme.button.primary.background} />
-        </Toggle.Button>
+        <ToggleJsonButton />
       </View>
     </ToggleStatusLogs>
   );
