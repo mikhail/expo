@@ -45,19 +45,20 @@ export async function runPrebuildAsync(packageName: string) {
 
   let { exp: config } = getConfig(projectRoot, {
     skipSDKVersionRequirement: true,
+    isModdedConfig: true,
   });
 
-  const plugins = appJson.expo.plugins;
+  // const plugins = appJson.expo.plugins;
 
-  plugins.reduce((prev, plugin) => {
-    return withStaticPlugin(prev, {
-      // hide errors
-      _isLegacyPlugin: true,
-      plugin,
-      // If a plugin doesn't exist, do nothing.
-      fallback: (config) => config,
-    });
-  }, config);
+  // plugins.reduce((prev, plugin) => {
+  //   return withStaticPlugin(prev, {
+  //     // hide errors
+  //     _isLegacyPlugin: true,
+  //     plugin,
+  //     // If a plugin doesn't exist, do nothing.
+  //     fallback: (config) => config,
+  //   });
+  // }, config);
 
   // // Add all android built-in plugins
   if (!config.android) config.android = {};
@@ -73,7 +74,7 @@ export async function runPrebuildAsync(packageName: string) {
     bundleIdentifier: config.ios.bundleIdentifier,
   });
 
-  return compileModsAsync(config, {
+  return await compileModsAsync(config, {
     projectRoot,
     platforms: ['ios', 'android'],
     assertMissingModProviders: false,

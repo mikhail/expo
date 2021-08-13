@@ -58,7 +58,7 @@ async function action(name: string, { platform, rebuild = false, clearCache = fa
 
     Logger.log('🔌 Applying config plugins');
     await runPrebuildAsync(packageName);
-
+    
     copyTemplateFiles(packageName);
   }
 

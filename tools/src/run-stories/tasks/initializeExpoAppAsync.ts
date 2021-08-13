@@ -40,6 +40,12 @@ export async function initializeExpoAppAsync(packageName: string) {
     watchRoot: packageRoot,
   };
 
+  // symlink package being worked on
+  mergedPkg['expo-yarn-workspaces'].symlinks = [
+    ...mergedPkg['expo-yarn-workspaces'].symlinks,
+    packagePkg.name,
+  ];
+
   // remove dependencies from excluded autolinked packages
   const extraNodeModules: any = packagePkg.expoStories?.packages ?? {};
 
