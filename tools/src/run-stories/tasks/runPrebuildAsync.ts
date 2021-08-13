@@ -31,15 +31,20 @@ export async function runPrebuildAsync(packageName: string) {
     bundleIdentifier: bundleId,
   };
 
-  const legacyPlugins = getLegacyExpoPlugins();
+  // const legacyPlugins = getLegacyExpoPlugins();
   const packageRoot = getPackageRoot(packageName);
 
-  const packagePkg = require(path.resolve(packageRoot, 'package.json'));
+  // const packagePkg = require(path.resolve(packageRoot, 'package.json'));
 
   // @todo - update logic around applying config plugins
   // search node_modules / deps instead of whatever is in config?
-  appJson.expo.plugins =
-    packagePkg.expoStories?.plugins || [].filter((pkg) => !legacyPlugins.includes(pkg));
+  const packagePlugin = path.resolve(packageRoot, 'app.plugin.js');
+
+  appJson.expo.plugins = [];
+
+  if (fs.existsSync(packagePlugin)) {
+    appJson.expo.plugins.push(packageName);
+  }
 
   fs.writeFileSync(appJsonPath, JSON.stringify(appJson, null, '\t'), { encoding: 'utf-8' });
 
@@ -47,18 +52,6 @@ export async function runPrebuildAsync(packageName: string) {
     skipSDKVersionRequirement: true,
     isModdedConfig: true,
   });
-
-  // const plugins = appJson.expo.plugins;
-
-  // plugins.reduce((prev, plugin) => {
-  //   return withStaticPlugin(prev, {
-  //     // hide errors
-  //     _isLegacyPlugin: true,
-  //     plugin,
-  //     // If a plugin doesn't exist, do nothing.
-  //     fallback: (config) => config,
-  //   });
-  // }, config);
 
   // // Add all android built-in plugins
   if (!config.android) config.android = {};
@@ -77,6 +70,5 @@ export async function runPrebuildAsync(packageName: string) {
   return await compileModsAsync(config, {
     projectRoot,
     platforms: ['ios', 'android'],
-    assertMissingModProviders: false,
   });
 }
