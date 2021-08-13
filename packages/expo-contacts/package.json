@@ -42,10 +42,5 @@
   "devDependencies": {
     "@types/uuid": "^3.4.7",
     "expo-module-scripts": "^2.0.0"
-  },
-  "expoStories": {
-    "plugins": [
-      "expo-contacts"
-    ]
   }
 }
