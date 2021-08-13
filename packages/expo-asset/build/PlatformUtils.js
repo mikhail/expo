@@ -1,4 +1,4 @@
-import { NativeModulesProxy } from '@unimodules/core';
+import { NativeModulesProxy } from 'expo-modules-core';
 import computeMd5 from 'blueimp-md5';
 import Constants from 'expo-constants';
 import * as FileSystem from 'expo-file-system';

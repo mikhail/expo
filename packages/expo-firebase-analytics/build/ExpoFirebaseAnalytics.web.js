@@ -1,4 +1,4 @@
-import { CodedError } from '@unimodules/core';
+import { CodedError } from 'expo-modules-core';
 import { DEFAULT_APP_OPTIONS } from 'expo-firebase-core';
 function getFirebaseModule() {
     try {
